@@ -462,6 +462,28 @@ entries:
     urls:
     - https://ciscodevnet.github.io/appdynamics-charts/cluster-agent-0.1.1.tgz
     version: 0.1.1
+  clustermon:
+  - apiVersion: v2
+    created: "2021-09-13T20:00:38.724604+05:30"
+    description: Sophisticated helm chart to deploy clustermon as a deployment in
+      addition to infra agent, containermon and servermon as a daemonset.
+    digest: 3f2cd5c9d5784189358589ed688e246b10f71a7cb6cc440e7d168e5e9dc0724d
+    home: https://appdynamics.com
+    icon: https://raw.githubusercontent.com/CiscoDevNet/appdynamics-charts/master/logo.png
+    keywords:
+    - appdynamics
+    - cluster
+    - kubernetes
+    - monitoring
+    - pod
+    - deployment
+    maintainers:
+    - email: support@appdynamics.com
+      name: AppDynamics
+    name: clustermon
+    urls:
+    - https://ciscodevnet.github.io/appdynamics-charts/clustermon-0.1.19.tgz
+    version: 0.1.19
   machine-agent:
   - apiVersion: v1
     appVersion: 20.3.2
@@ -620,4 +642,4 @@ entries:
     urls:
     - https://ciscodevnet.github.io/appdynamics-charts/machine-agent-0.2.2.tgz
     version: 0.2.2
-generated: "2021-07-28T12:54:27.663648124Z"
+generated: "2021-09-13T20:00:38.722735+05:30"
