@@ -1,0 +1,138 @@
+#Docker Images
+imageInfo:
+  clustermonImage: appdynamics/clustermon
+  clustermonImageTag: latest #Needs to be changed in prod
+  infraAgentImage: appdynamics/clustermon #Needs to be changed to infra agent image?
+  infraAgentImageTag: latest #Needs to be changed in prod
+  operatorImage: dtr.corp.appdynamics.com/clustermon/appdynamics-operator-levitate
+  operatorImageTag: latest #Needs to be changed in prod
+  operatorImagePullPolicy: Always
+
+#Required Auth info for Infra Agent
+authInfo:
+  clientId: c3jmo9t4s56l5hr66aq0 #Set to null in prod
+  tenantId: 19839a22-86c5-4050-aabe-846d3aec74b6 #Set to null in prod
+  clientSecret: tV4mFqajkoDsRw1O1Vt4nCT4gHIjgLd7SStRQoCHX7A #Set to null in prod
+  authEndpoint: l4a-ce-authz.saas.appd-test.com #Set to null in prod
+  endpoint: pdx-t01-lev17-k8s-a1-external-ingress.saas.appd-test.com:443 #Set to null in prod
+
+# RBAC config
+# TODO: Modify this when service account for clustermon is created?
+agentServiceAccount:  #Yet to be created
+operatorServiceAccount: appdynamics-operator
+
+#Clustermon Configs
+#TODO: Change ports and other values to type integer from type string
+# TODO: what configs do we expose?
+clustermonConfig:
+  clusterName: dev #Needs to be changed in prod
+  enabled: "true"
+  logLevel: info
+  logFilesMaxSizeMB: "10"
+  logFilesNumBackups: "4"
+  tickerInterval: "60" #TODO: does this need to be exposed?
+
+  namespaceFilter:
+    includeRegex: ".*"
+    excludeRegex: ""
+
+  entityFilter:
+    excludeRegex: ""
+    excludeLabels:
+
+  labelFilter:
+    excludeRegex: ""
+
+  ingressControllers: {}
+
+#Infra Agent Configs
+infraAgentConfig:
+  logLevel: info
+  logFilesMaxSizeMB: "10"
+  logFilesNumBackups: "4"
+#TODO: What to expose out of the following?
+#  exporter-transport:
+#  client-lib-send-url:
+#  client-lib-recv-url:
+#  http-client-timeout-ms:
+#  collectors-conf-scan-interval-seconds:
+#  collectors-conf-stale-grace-interval-seconds:
+#  debug-enabled:
+#  debug-send-url:
+#  debug-recv-url:
+#  file-exporter-enabled:
+#  file-exporter-name:
+#  metric-batch-size-count:
+#  logs-batch-timeout-seconds:
+#  metrics-batch-timeout-seconds:
+#  logs-batch-size-count:
+#  proxy-url:
+#  proxy-user-name:
+#  proxy-password:
+#  file-exporter-metrics-output-file:
+#  file-exporter-logs-output-file:
+#  file-exporter-logs-enabled:
+#  file-exporter-metrics-enabled:
+#  print-to-stdout:
+#  receiver-ca-file:
+#  receiver-cert-file:
+#  receiver-key-file:
+#  receiver-port:
+
+#Servermon Configs
+servermonConfig:
+  name: ServerMon
+  gatherInterval: 10
+  logLevel: info
+  logFilesMaxSizeMB: "10"
+  logFilesNumBackups: "4"
+  #TODO: Figure out what properties need to be exposed
+  #exporter-address: %s
+  #exporter-port: %s
+  #dependency: %s
+  #privileged: %s
+  #install-dependency: %s
+  #default-collector: %s
+
+#Containermon Configs
+containermonConfig:
+  name: ContainerMon
+  gatherInterval: 10
+  logLevel: info
+  logFilesMaxSizeMB: "10"
+  logFilesNumBackups: "4"
+  #TODO: Figure out what properties need to be exposed
+  #exporter-address: %s
+  #exporter-port: %s
+  #dependency: %s
+  #privileged: %s
+  #install-dependency: %s
+  #default-collector: %s
+
+#Deployment specific configs
+clustermonPod:
+  resources:
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  imagePullSecrets: []
+  affinity:
+  tolerations: []
+  securityContext:
+  imagePullPolicy: Never #Needs to be changed in prod
+
+#Daemonset specific configs
+inframonPod:
+  resourcea:
+  labels: {}
+  annotations: {}
+  nodeSelector: {}
+  imagePullSecrets: []
+  affinity:
+  tolerations: []
+  securityContext:
+  imagePullPolicy: Never #Needs to be changed in prod
+
+#Operator pod specific configs
+operatorPod:
+

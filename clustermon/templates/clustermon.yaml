@@ -1,0 +1,41 @@
+apiVersion: cluster.appdynamics.com/v1alpha1
+kind: Clustermon
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "appdynamics-clustermon" | trunc 63 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  image: {{ .Values.imageInfo.clustermonImage }}:{{ .Values.imageInfo.clustermonImageTag }}
+
+  {{ with .Values.clustermonConfig -}}
+  clusterName: {{ .clusterName }}
+  enabled: {{ .enabled | quote}}
+  log-level: {{ .logLevel }}
+  log-files-max-size-mb: {{ .logFilesMaxSizeMB | quote}}
+  log-files-num-backups: {{ .logFilesNumBackups | quote}}
+  tickerInterval: {{ .tickerInterval | quote}}
+  namespaceFilter:
+  {{- toYaml .namespaceFilter | nindent 4 }}
+  entityFilter:
+  {{- toYaml .entityFilter | nindent 4 }}
+  labelFilter:
+  {{- toYaml .labelFilter | nindent 4 }}
+  ingressControllers:
+  {{- toYaml .ingressControllers | nindent 4 }}
+
+  {{- end }}
+
+  {{ with .Values.clustermonPod -}}
+  resources: {{ .resources }}
+  labels:
+  {{- toYaml .labels | nindent 4 }}
+  annotations:
+  {{- toYaml .annotations | nindent 4 }}
+  nodeSelector:
+  {{- toYaml .nodeSelector | nindent 4 }}
+  imagePullSecrets:
+  {{- toYaml .imagePullSecrets | nindent 4 }}
+  affinity: {{ .affinity }}
+  tolerations: {{ .tolerations }}
+  securityContext: {{ .securityContext }}
+  imagePullPolicy: {{ .imagePullPolicy }}
+  {{- end }}

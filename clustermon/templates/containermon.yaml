@@ -1,0 +1,15 @@
+apiVersion: cluster.appdynamics.com/v1alpha1
+kind: Containermon
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "appdynamics-containermon" | trunc 63 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  {{ with .Values.containermonConfig -}}
+  name: {{ .name }}
+  gather-interval: {{ .gatherInterval | quote}}
+  log-files-max-size-mb: {{ .logFilesMaxSizeMB | quote}}
+  log-files-num-backups: {{ .logFilesNumBackups | quote}}
+  log-level: {{ .logLevel }}
+  #TODO: Add whatever properties are finalized to be exposed by containermon
+  {{- end }}
+

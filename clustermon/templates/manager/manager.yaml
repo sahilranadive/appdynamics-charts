@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appdynamics-operator
+  namespace: {{ .Release.Namespace }}
+  labels:
+    control-plane: appdynamics-operator
+spec:
+  selector:
+    matchLabels:
+      control-plane: appdynamics-operator
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        control-plane: appdynamics-operator
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+      - name: kube-rbac-proxy
+        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
+        args:
+        - "--secure-listen-address=0.0.0.0:8443"
+        - "--upstream=http://127.0.0.1:8080/"
+        - "--logtostderr=true"
+        - "--v=10"
+        ports:
+        - containerPort: 8443
+          name: https
+      - name: manager
+        args:
+        - --leader-elect
+        image: dtr.corp.appdynamics.com/clustermon/appdynamics-operator-levitate:latest
+        imagePullPolicy: Never
+        securityContext:
+          allowPrivilegeEscalation: false
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 200m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+      serviceAccountName: appdynamics-operator
+      terminationGracePeriodSeconds: 10

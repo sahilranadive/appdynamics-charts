@@ -1,0 +1,14 @@
+apiVersion: cluster.appdynamics.com/v1alpha1
+kind: Servermon
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "appdynamics-servermon" | trunc 63 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  {{ with .Values.servermonConfig -}}
+  name: {{ .name }}
+  gather-interval: {{ .gatherInterval | quote}}
+  log-files-max-size-mb: {{ .logFilesMaxSizeMB | quote}}
+  log-files-num-backups: {{ .logFilesNumBackups | quote}}
+  log-level: {{ .logLevel }}
+  #TODO: Add whatever properties are finalized to be exposed by servermon
+  {{- end }}

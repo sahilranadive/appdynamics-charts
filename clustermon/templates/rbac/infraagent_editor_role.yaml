@@ -1,0 +1,25 @@
+# permissions for end users to edit infraagents.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: infraagent-editor-role
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups:
+  - cluster.appdynamics.com
+  resources:
+  - infraagents
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cluster.appdynamics.com
+  resources:
+  - infraagents/status
+  verbs:
+  - get

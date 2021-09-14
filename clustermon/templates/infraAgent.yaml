@@ -1,0 +1,35 @@
+apiVersion: cluster.appdynamics.com/v1alpha1
+kind: InfraAgent
+metadata:
+  name: {{ printf "%s-%s" .Release.Name "appdynamics-infra-agent" | trunc 63 }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  image: {{ .Values.imageInfo.infraAgentImage }}:{{ .Values.imageInfo.infraAgentImageTag }}
+  client-id: {{ required "AppDynamics Client ID is required!" .Values.authInfo.clientId }}
+  client-secret: {{ required "AppDynamics Client Secret is required!" .Values.authInfo.clientSecret }}
+  tenant-id: {{ required "AppDynamics Tenant ID is required!" .Values.authInfo.tenantId }}
+  endpoint: {{ required "AppDynamics Endpoint is required!" .Values.authInfo.endpoint }}
+  auth-endpoint: {{ required "AppDynamics Auth Endpoint is required!" .Values.authInfo.authEndpoint }}
+
+  {{ with .Values.infraAgentConfig -}}
+  log-files-max-size-mb: {{ .logFilesMaxSizeMB | quote}}
+  log-files-num-backups: {{ .logFilesNumBackups | quote}}
+  log-level: {{ .logLevel }}
+  #TODO: Add whatever properties are finalized to be exposed by Infra Agent
+  {{- end }}
+
+  {{ with .Values.inframonPod -}}
+  resources: {{ .resources }}
+  labels:
+  {{- toYaml .labels | nindent 4 }}
+  annotations:
+  {{- toYaml .annotations | nindent 4 }}
+  nodeSelector:
+  {{- toYaml .nodeSelector | nindent 4 }}
+  imagePullSecrets:
+  {{- toYaml .imagePullSecrets | nindent 4 }}
+  affinity: {{ .affinity }}
+  tolerations: {{ .tolerations }}
+  securityContext: {{ .securityContext }}
+  imagePullPolicy: {{ .imagePullPolicy }}
+  {{- end }}

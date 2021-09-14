@@ -1,0 +1,21 @@
+# permissions for end users to view infraagents.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: infraagent-viewer-role
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups:
+  - cluster.appdynamics.com
+  resources:
+  - infraagents
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.appdynamics.com
+  resources:
+  - infraagents/status
+  verbs:
+  - get

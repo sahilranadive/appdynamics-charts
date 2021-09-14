@@ -1,0 +1,21 @@
+# permissions for end users to view clustermons.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: clustermon-viewer-role
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups:
+  - cluster.appdynamics.com
+  resources:
+  - clustermons
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cluster.appdynamics.com
+  resources:
+  - clustermons/status
+  verbs:
+  - get
